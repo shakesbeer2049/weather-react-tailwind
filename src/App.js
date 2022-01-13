@@ -36,7 +36,7 @@ const App = () => {
     setShowWeek(false);
     setShowMonth(true);
   };
-  let spliced = [];
+  
   let weatherWeek = [];
   const date = new Date().toString().substring(0, 15);
   const searchHandler = async (e) => {
@@ -46,16 +46,16 @@ const App = () => {
       if(country === "") alert('Write something, will ya bruh!')
       else{
         
-      const resMonth = await axios.get(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${country}&units=metric&cnt=16&appid=${process.env.REACT_APP_KEY}`);
+      const resMonth = await axios.get(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${country}&units=metric&cnt=16&appid=${process.env.REACT_APP_KEY}`);
       setForecastMonth(resMonth.data.list);
 
       //Day
-      const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
+      const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
       // console.log(res.data, 'res')
       setWeather(res.data);
 
       //5 Days
-      const resWeek = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
+      const resWeek = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
       
       setForecastWeek(resWeek.data.list);
       resWeek.data.list.map((l) => weatherWeek.push(l));
