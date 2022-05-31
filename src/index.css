@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 body{
-  background-color: wheat;
+  /* background-color: wheat; */
 }
 #border{
   border-bottom : 4px solid teal; 
@@ -10,6 +10,7 @@ body{
 .forecast-hr{
   width: 85%;
   margin: auto;
+
 }
 .left{
   background: #00b09b;  /* fallback for old browsers */
@@ -20,5 +21,6 @@ background: linear-gradient(to right, #96c93d, #00b09b); /* W3C, IE 10+/ Edge, F
 @media (max-width:640px) {
   .left{
     width: 100%;
+    border-radius: 0%;
   }
 }

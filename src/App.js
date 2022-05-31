@@ -1,7 +1,8 @@
-import { useState,} from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 import "./index.css";
 import WeatherToday from "./components/weatherToday";
+
 
 const App = () => {
   //Weather data state
@@ -9,7 +10,7 @@ const App = () => {
   const [today, setToday] = useState([]);
   const [forecastWeek, setForecastWeek] = useState();
   const [forecastMonth, setForecastMonth] = useState();
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("Srinagar");
 
   // Switch today/5/16 state
   const [showToday, setShowToday] = useState(true);
@@ -71,7 +72,39 @@ const App = () => {
       window.alert(error.toString())
     }
   };
-
+  useEffect(()=>{
+    const firstRender = async() => {
+      try {
+        if(country === "") alert('Write something, will ya bruh!')
+        else{
+          
+        const resMonth = await axios.get(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${country}&units=metric&cnt=16&appid=${process.env.REACT_APP_KEY}`);
+        setForecastMonth(resMonth.data.list);
+  
+        //Day
+        const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
+        // console.log(res.data, 'res')
+        setWeather(res.data);
+  
+        //5 Days
+        const resWeek = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${country}&appid=${process.env.REACT_APP_KEY}&units=metric`);
+        
+        setForecastWeek(resWeek.data.list);
+        resWeek.data.list.map((l) => weatherWeek.push(l));
+       
+  
+        //3 hour forecasts for current day , resWeek returns objects with 3 hour forecasts
+        setToday(weatherWeek.splice(0, 5)); //store first 5 objects as they contain 3 hour forecasts for today
+        }
+        
+  
+        
+      } catch (error) {
+        window.alert(error.toString())
+      }
+    }
+    firstRender();
+  },[])
   const inputHandler = (e) => {
     setCountry(e.target.value);
   };
@@ -105,6 +138,7 @@ const App = () => {
           <form onSubmit={searchHandler} className="">
             <input
               onChange={inputHandler}
+              value = {country || ""}
               className="border shadow-md rounded-md block m-auto mb-3 text-black text-center"
             />
             <button
@@ -116,7 +150,7 @@ const App = () => {
           </form>
           {weather ? (
             <div className="weather  sm:mt-52 pt-24 pl-7 ">
-              <h1 className="temp-L text-5xl">{weather.main.temp.toFixed(1)} &deg;</h1>{" "}
+              <h1 className="temp-L text-5xl">{weather.main.temp.toFixed(1)}&deg;C</h1>{" "}
               <p className="city sm:mb-11 pl-3">{weather.name}</p>
             </div>
           ) : (
